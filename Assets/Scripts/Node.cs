@@ -1,69 +1,95 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour
 {
+    [Header("Attributes")]
     public Color hoverColor;
     public Color activeColor;
     public Color modifyColor;
 
+    private Vector3 initialPos;
     private Color initialColor;
     private Renderer rend;
-    private GameObject turret;
+    private GameObject construction;
+    private BuildManager buildManager;
+    private bool isActive = false;
 
     void Start()
     {
         rend = GetComponent<Renderer>();
+
+        initialPos = transform.position;
         initialColor = rend.material.color;
+        buildManager = BuildManager.instance;
     }
     void OnMouseEnter()
     {
-        if (turret != null)
+        if (
+            !buildManager.IsConstructionPrefab() ||
+            EventSystem.current.IsPointerOverGameObject()
+        )
+            return;
+
+        if (construction != null)
         {
-            rend.material.color = modifyColor;
+            // rend.material.color = modifyColor;
         }
         else
         {
-            rend.material.color = hoverColor;
-            RaiseTheNode();
+            ActiveNode();
         }
     }
 
     void OnMouseExit()
     {
-        if (turret != null)
+        if (construction != null)
         {
-            rend.material.color = activeColor;
+            ActiveNode();
         }
         else
         {
-            rend.material.color = initialColor;
-            LowerTheNode();
+            ResetNode();
         }
     }
 
     void OnMouseDown()
     {
-        if (turret != null)
+        if (
+            !buildManager.IsConstructionPrefab() ||
+            EventSystem.current.IsPointerOverGameObject()
+        )
+            return;
+        
+        if (construction != null)
         {
             Debug.Log("Must implement modification.");
         }
         else
         {
-            rend.material.color = activeColor;
+            ActiveNode();
 
             // Build a turret on it
-            GameObject turretToBuild = BuildManager.instance.GetTurretToBuild();
-            turret = (GameObject)Instantiate(turretToBuild, transform.position, transform.rotation);
+            GameObject constructionPrefab = buildManager.GetConstructionPrefab();
+            construction = (GameObject)Instantiate(constructionPrefab, transform.position, transform.rotation);
         }
     }
 
-    void RaiseTheNode()
+    void ActiveNode()
     {
+        if (isActive)
+            return;
+
+        isActive = true;
+
+        rend.material.color = hoverColor;
         transform.Translate(Vector3.up * 0.5f, Space.World);
     }
 
-    void LowerTheNode()
+    void ResetNode()
     {
-        transform.Translate(Vector3.down * 0.5f, Space.World);
+        isActive = false;
+        transform.position = initialPos;
+        rend.material.color = initialColor;
     }
 }

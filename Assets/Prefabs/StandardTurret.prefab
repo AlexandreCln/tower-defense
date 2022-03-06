@@ -50,9 +50,9 @@ MonoBehaviour:
   fireRate: 1
   fireCountdown: 0
   range: 15
-  partToRotate: {fileID: 4088800413497349587}
+  rotatePoint: {fileID: 4088800413497349587}
   enemyTag: Enemy
-  bulletPrefab: {fileID: 8100295713724882381, guid: 9594e9cf3bc25bc4f94c0e2147e8c7b8, type: 3}
+  projectilePrefab: {fileID: 8100295713724882381, guid: 9594e9cf3bc25bc4f94c0e2147e8c7b8, type: 3}
   firePoint: {fileID: 7588013579300097304}
 --- !u!1 &3554583263918476848
 GameObject:
@@ -260,7 +260,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4088800413497349587}
   m_Layer: 0
-  m_Name: PartToRotate
+  m_Name: RotatePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
