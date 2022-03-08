@@ -2,20 +2,25 @@ using UnityEngine;
 
 public class Construction : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
 
-    [Header("Attributes")]
-
+    [Header("General")]
+    public float range = 15f;
     public float rotationSpeed = 20f;
+
+    [Header("Use Projectile (default)")]
+    public GameObject projectilePrefab = null;
     public float fireRate = 1f;
     public float fireCountdown = 1f;
-    public float range = 15f;
+
+    [Header("Use Laser")]
+    public  bool useLaser = false;
+    public LineRenderer lineRenderer;
+    public ParticleSystem impactEffect;
 
     [Header("Setup Fields")]
-
     public Transform rotatePoint;
     public string enemyTag = "Enemy";
-    public GameObject projectilePrefab;
     public Transform firePoint;
 
     void Start()
@@ -25,30 +30,24 @@ public class Construction : MonoBehaviour
 
     void Update()
     {
-        if (target == null)
+        if (target == null) {
+
+            if (useLaser)
+            {
+                LaserOff();
+            }
             return;
-
-        Vector3 dir = target.position - transform.position;
-        // Euler angles suffer from "gimbal lock", a loss of 1 degree when 2 of 3 axis 
-        // moves in the same direction, that's why Unity store all rotations as Quaternions.
-        // Quarternions's functions manage x,y,z,w components (not axis) together as we must never ajust them individually.
-        // LookRotation is a quaternion's roration aligned with the Vector3 passed in,
-        // that represent how do turret needs to rotate to look in target direction.
-        Quaternion lookRotation = Quaternion.LookRotation(dir);
-        // Convert it to eulerAngles to use only the Y axis (instead of uaternion directly).
-        // Lerp is for Linear Interpolation, it interpolate 2 normalized quaternions 
-        // (unit between 0 and 1 calculated by the 4 components) over time. 
-        // The 3rd parameter is  percentage wanted between the 2 quaternions (rotations).
-        Vector3 rotation = Quaternion.Lerp(rotatePoint.rotation, lookRotation, Time.deltaTime * rotationSpeed).eulerAngles;
-        // creates a new quaternion on Y axis only
-        rotatePoint.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-
-        if (fireCountdown <= 0f)
-        {
-            Shoot();
-            fireCountdown = 1f / fireRate;
         }
-        fireCountdown -= Time.deltaTime;
+
+        LookOnTarget();
+
+        if (useLaser)
+        {
+            LaserOn();
+        }
+        else {
+            Projectile();
+        }
     }
 
     void Shoot()
@@ -86,6 +85,54 @@ public class Construction : MonoBehaviour
         {
             target = null;
         }
+    }
+
+    void LookOnTarget()
+    {
+        Vector3 dir = target.position - transform.position;
+        // Euler angles suffer from "gimbal lock", a loss of 1 degree when 2 of 3 axis 
+        // moves in the same direction, that's why Unity store all rotations as Quaternions.
+        // Quarternions's functions manage x,y,z,w components (not axis) together as we must never ajust them individually.
+        // LookRotation is a quaternion's roration aligned with the Vector3 passed in,
+        // that represent how do turret needs to rotate to look in target direction.
+        Quaternion lookRotation = Quaternion.LookRotation(dir);
+        // Convert it to eulerAngles to use only the Y axis (instead of uaternion directly).
+        // Lerp is for Linear Interpolation, it interpolate 2 normalized quaternions 
+        // (unit between 0 and 1 calculated by the 4 components) over time. 
+        // The 3rd parameter is  percentage wanted between the 2 quaternions (rotations).
+        Vector3 rotation = Quaternion.Lerp(rotatePoint.rotation, lookRotation, Time.deltaTime * rotationSpeed).eulerAngles;
+        // creates a new quaternion on Y axis only
+        rotatePoint.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+    }
+
+    void LaserOn()
+    {
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(0, firePoint.position);
+        lineRenderer.SetPosition(1, target.position);
+
+        Vector3 effectDirection = target.position - transform.position;
+        // 0.5 represent the enemy radius
+        impactEffect.transform.position = target.position - (effectDirection.normalized * 0.5f);
+        impactEffect.transform.rotation = Quaternion.LookRotation(effectDirection * -1);
+        impactEffect.Play();
+    }
+
+    void LaserOff()
+    {
+        // Stop method allows to stop emmision and keep already spawned particles
+        lineRenderer.enabled = false;
+        impactEffect.Stop();
+    }
+
+    void Projectile()
+    {
+        if (fireCountdown <= 0f)
+        {
+            Shoot();
+            fireCountdown = 1f / fireRate;
+        }
+        fireCountdown -= Time.deltaTime;
     }
 
     void OnDrawGizmosSelected()

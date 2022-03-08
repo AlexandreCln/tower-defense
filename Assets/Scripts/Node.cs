@@ -33,7 +33,8 @@ public class Node : MonoBehaviour
         //     buildManager.BuildConstructionOn(this);
         // }
     }
-    void OnMouseEnter()
+
+    void OnMouseOver()
     {
         if (
             !buildManager.CanBuild ||

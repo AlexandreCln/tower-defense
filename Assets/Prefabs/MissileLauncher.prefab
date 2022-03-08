@@ -128,14 +128,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f16762d790f0d4eb8398751c5897ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  rotationSpeed: 10
+  range: 30
+  rotationSpeed: 6
+  projectilePrefab: {fileID: 7058347766893316633, guid: 4351a7af360b14f489441515f26e03e8, type: 3}
   fireRate: 0.4
   fireCountdown: 1
-  range: 30
+  useLaser: 0
+  lineRenderer: {fileID: 0}
   rotatePoint: {fileID: 4261436145654758330}
   enemyTag: Enemy
-  projectilePrefab: {fileID: 7058347766893316633, guid: 4351a7af360b14f489441515f26e03e8, type: 3}
   firePoint: {fileID: 4261436146293785791}
 --- !u!1 &4261436145654758331
 GameObject:
