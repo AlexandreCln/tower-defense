@@ -3,6 +3,8 @@ using UnityEngine;
 public class Construction : MonoBehaviour
 {
     private Transform target;
+    // Enemy component
+    private Enemy targetEnemy;
 
     [Header("General")]
     public float range = 15f;
@@ -17,6 +19,8 @@ public class Construction : MonoBehaviour
     public  bool useLaser = false;
     public LineRenderer lineRenderer;
     public ParticleSystem impactEffect;
+    public int damagePerSecond;
+    public float slowPct = .5f;
 
     [Header("Setup Fields")]
     public Transform rotatePoint;
@@ -25,7 +29,7 @@ public class Construction : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating("UpdateTarget", 0f, .5f);
     }
 
     void Update()
@@ -80,6 +84,7 @@ public class Construction : MonoBehaviour
         if (nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
+            targetEnemy = target.GetComponent<Enemy>();
         }
         else
         {
@@ -107,15 +112,22 @@ public class Construction : MonoBehaviour
 
     void LaserOn()
     {
+        targetEnemy.Slow(slowPct);
+        targetEnemy.TakeDamage(damagePerSecond * Time.deltaTime);
+        
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, firePoint.position);
         lineRenderer.SetPosition(1, target.position);
 
         Vector3 effectDirection = target.position - transform.position;
-        // 0.5 represent the enemy radius
-        impactEffect.transform.position = target.position - (effectDirection.normalized * 0.5f);
+        // a Vector3 normalized correspond to 1, that is also fortunally the enemy radius
+        impactEffect.transform.position = target.position - (effectDirection.normalized);
         impactEffect.transform.rotation = Quaternion.LookRotation(effectDirection * -1);
-        impactEffect.Play();
+    
+        if (impactEffect.isStopped)
+        {
+            impactEffect.Play();
+        }
     }
 
     void LaserOff()
@@ -123,6 +135,7 @@ public class Construction : MonoBehaviour
         // Stop method allows to stop emmision and keep already spawned particles
         lineRenderer.enabled = false;
         impactEffect.Stop();
+        targetEnemy.StopSlow();
     }
 
     void Projectile()

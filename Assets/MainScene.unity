@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44504917, g: 0.49464208, b: 0.57374185, a: 1}
+  m_IndirectSpecularColor: {r: 0.442733, g: 0.49187028, b: 0.5716572, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1190,7 +1190,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.9433962, g: 0.8294682, b: 0.5193306, a: 1}
+  m_Color: {r: 1, g: 0.7326297, b: 0.52218866, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1248,13 +1248,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.37373638, y: -0.50417536, z: 0.26186293, w: 0.73318225}
-  m_LocalPosition: {x: 59.6, y: -42.7, z: -22.3}
+  m_LocalRotation: {x: 0.50580794, y: 0, z: 0, w: 0.86264616}
+  m_LocalPosition: {x: 0, y: 7.1, z: 24.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 54.3, y: -68.67, z: 0.7}
+  m_LocalEulerAnglesHint: {x: 60.77, y: 0, z: 0}
 --- !u!4 &717202067 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7826768070513644077, guid: 6d55b1c4b1922714d988d211f77c7539, type: 3}
@@ -2618,7 +2618,7 @@ MonoBehaviour:
     prefab: {fileID: 2976562423957798912, guid: 4cbbf70f8fbf8f34fb7610988d70d40d, type: 3}
     cost: 250
   laserBeamer:
-    prefab: {fileID: 3390328507259285447, guid: 439b10daf1aa3824da75ce52f5199c5c, type: 3}
+    prefab: {fileID: 8205960513257678840, guid: 439b10daf1aa3824da75ce52f5199c5c, type: 3}
     cost: 350
 --- !u!4 &1467915303 stripped
 Transform:
