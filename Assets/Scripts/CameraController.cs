@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     [Header("Attributes")]
-    public float panSpeed = 20f;
-    public float scrollSpeed = 2f;
+    public float panSpeed = 70f;
+    public float scrollSpeed = 5f;
+    public float minZ = -7;
+    public float maxZ = 58;
+    public float minX = -25;
+    public float maxX = 25;
     public float minZoomY = 10f;
     public float minZoomRotationX = 40f;
     public float panBoarderThickness = 10f;
@@ -31,7 +33,7 @@ public class CameraController : MonoBehaviour
         if (!controlCamera)
             return;
             
-        HandleKeyboardMove();
+        // HandleKeyboardMove();
         HandleMouseMove();
     }
 
@@ -107,11 +109,35 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void MoveUp() => transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
-    
-    void MoveLeft() => transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
-    
-    void MoveDown() => transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
+    void MoveUp()
+    {
+        if (transform.position.z >= maxZ)
+            return;
 
-    void MoveRight() => transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
+        transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
+    }
+    
+    void MoveDown()
+    {
+        if (transform.position.z <= minZ)
+            return;
+
+        transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
+    }
+    
+    void MoveLeft()
+    {
+        if (transform.position.x <= minX)
+            return;
+
+        transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
+    }
+
+    void MoveRight()
+    {
+        if (transform.position.x >= maxX)
+            return;
+
+        transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
+    }
 }

@@ -7,10 +7,10 @@ public class Projectile : MonoBehaviour
     [Header("Attributes")]
     public float speed = 70f;
     public float explosionRadius = 0f;
+    public int damage = 50;
 
     [Header("Unity Setup Fields")]
     public GameObject impactEffect;
-
 
     public void Seek(Transform _target)
     {
@@ -45,8 +45,8 @@ public class Projectile : MonoBehaviour
     void HitTarget()
     {
         GameObject effectIns = (GameObject)Instantiate(impactEffect, transform.position, transform.rotation);
-        Destroy(effectIns, 5f);
-        Debug.Log(impactEffect);
+        float effectDuration = impactEffect.GetComponent<ParticleSystem>().main.duration;
+        Destroy(effectIns, effectDuration);
 
         // Handle AOE or single target
         if (explosionRadius > 0f)
@@ -62,7 +62,12 @@ public class Projectile : MonoBehaviour
 
     void Damage(Transform target)
     {
-        Destroy(target.gameObject);
+        Enemy enemy = target.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
+        }
     }
 
     void Explode()

@@ -4,29 +4,39 @@ using UnityEngine.EventSystems;
 public class Node : MonoBehaviour
 {
     [Header("Attributes")]
-    public Color hoverColor;
     public Color activeColor;
+    public Color alarmingColor;
+    public Color hoverColor;
     public Color modifyColor;
+
+    [Header("Optionnal")]
+    public GameObject construction;
 
     private Vector3 initialPos;
     private Color initialColor;
     private Renderer rend;
-    private GameObject construction;
     private BuildManager buildManager;
     private bool isActive = false;
 
     void Start()
     {
+        buildManager = BuildManager.instance;
         rend = GetComponent<Renderer>();
 
         initialPos = transform.position;
         initialColor = rend.material.color;
-        buildManager = BuildManager.instance;
+
+        // if (construction != null)
+        // {
+        //     ActiveNode();
+        //     buildManager.SetConstructionBlueprint(construction);
+        //     buildManager.BuildConstructionOn(this);
+        // }
     }
     void OnMouseEnter()
     {
         if (
-            !buildManager.IsConstructionPrefab() ||
+            !buildManager.CanBuild ||
             EventSystem.current.IsPointerOverGameObject()
         )
             return;
@@ -37,7 +47,14 @@ public class Node : MonoBehaviour
         }
         else
         {
-            ActiveNode();
+            if (buildManager.CanBuy)
+            {
+                ActiveNode();
+            }
+            else
+            {
+                AlarmingNode();
+            }
         }
     }
 
@@ -56,7 +73,7 @@ public class Node : MonoBehaviour
     void OnMouseDown()
     {
         if (
-            !buildManager.IsConstructionPrefab() ||
+            !buildManager.CanBuild ||
             EventSystem.current.IsPointerOverGameObject()
         )
             return;
@@ -64,14 +81,12 @@ public class Node : MonoBehaviour
         if (construction != null)
         {
             Debug.Log("Must implement modification.");
+            return;
         }
-        else
+        else if (buildManager.CanBuy)
         {
             ActiveNode();
-
-            // Build a turret on it
-            GameObject constructionPrefab = buildManager.GetConstructionPrefab();
-            construction = (GameObject)Instantiate(constructionPrefab, transform.position, transform.rotation);
+            buildManager.BuildConstructionOn(this);
         }
     }
 
@@ -82,8 +97,13 @@ public class Node : MonoBehaviour
 
         isActive = true;
 
-        rend.material.color = hoverColor;
+        rend.material.color = activeColor;
         transform.Translate(Vector3.up * 0.5f, Space.World);
+    }
+
+    void AlarmingNode()
+    {
+        rend.material.color = alarmingColor;
     }
 
     void ResetNode()

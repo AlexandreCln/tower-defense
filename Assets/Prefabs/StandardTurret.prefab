@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   rotationSpeed: 7
-  fireRate: 1
+  fireRate: 4
   fireCountdown: 0
   range: 15
   rotatePoint: {fileID: 4088800413497349587}

@@ -108,6 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af706ff12d62674989d06b25e99dd8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeColor: {r: 0.8509804, g: 0.9019608, b: 0.9607843, a: 0}
+  alarmingColor: {r: 1, g: 0.37770566, b: 0.2203018, a: 0}
   hoverColor: {r: 0.2700655, g: 0.5943396, b: 0.119720146, a: 0}
-  activeColor: {r: 0.10072911, g: 0.31132078, b: 0.003970778, a: 0}
   modifyColor: {r: 0.764151, g: 0.7005378, b: 0.016955443, a: 0}
+  construction: {fileID: 0}

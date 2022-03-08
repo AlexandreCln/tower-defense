@@ -1,23 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
     BuildManager buildManager;
+    public ConstructionBlueprint standardTurret;
+    public ConstructionBlueprint missileLauncher;
 
     void Start()
     {
         buildManager = BuildManager.instance;
     }
     
-    public void PurchaseStandardTurret()
+    public void SelectStandardTurret()
     {
-        buildManager.SetConstructionPrefab(buildManager.standardTurretPrefab);
+        buildManager.SetConstructionBlueprint(standardTurret);
     }
     
-    public void PurchaseMissileLauncher()
+    public void SelectMissileLauncher()
     {
-        buildManager.SetConstructionPrefab(buildManager.missileLauncherPrefab);
+        buildManager.SetConstructionBlueprint(missileLauncher);
     }
 }

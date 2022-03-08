@@ -7,11 +7,9 @@ public class BuildManager : MonoBehaviour
     // static means accessible without BuildManager instantiation from other class.
     public static BuildManager instance;
 
-    [Header("Prefabs")]
-    public GameObject standardTurretPrefab;
-    public GameObject missileLauncherPrefab;
+    public GameObject buildEffect;
 
-    private GameObject constructionPrefab;
+    private ConstructionBlueprint constructionBlueprint;
 
     // Instantiate BuildManager once.
     void Awake()
@@ -22,9 +20,28 @@ public class BuildManager : MonoBehaviour
         instance = this;
     }
 
-    public GameObject GetConstructionPrefab() => constructionPrefab;
+    public void SetConstructionBlueprint(ConstructionBlueprint construction) => constructionBlueprint = construction;
 
-    public GameObject SetConstructionPrefab(GameObject turretPrefab) => constructionPrefab = turretPrefab;
+    public bool CanBuild { 
+        get => constructionBlueprint != null; 
+    }
 
-    public bool IsConstructionPrefab() => constructionPrefab != null;
+    public bool CanBuy { 
+        get => PlayerStats.Money >= constructionBlueprint.cost; 
+    }
+
+    public void BuildConstructionOn(Node node)
+    {
+        if (PlayerStats.Money < constructionBlueprint.cost)
+            return;
+
+        PlayerStats.Money -= constructionBlueprint.cost;
+
+        GameObject construction = Instantiate(constructionBlueprint.prefab, node.transform.position, Quaternion.identity);
+        node.construction = construction;
+
+        GameObject effect= Instantiate(buildEffect, node.transform.position, Quaternion.identity);
+        float effectDuration = buildEffect.GetComponent<ParticleSystem>().main.duration;
+        Destroy(effect, effectDuration);
+    }
 }
