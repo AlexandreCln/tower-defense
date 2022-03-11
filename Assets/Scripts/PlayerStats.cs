@@ -5,12 +5,14 @@ public class PlayerStats : MonoBehaviour
     public static int Money;
     public int startMoney = 200;
     public static int Lives;
-    public int startLives = 30;
+    public int startLives = 20;
+    public static int Rounds;
 
     void Start()
     {
-        // reset money across levels
+        // reset initial values across levels (scenes)
         Money = startMoney;
         Lives = startLives;
+        Rounds = 0;
     }
 }

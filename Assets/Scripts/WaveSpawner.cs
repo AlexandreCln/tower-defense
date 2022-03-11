@@ -28,16 +28,19 @@ public class WaveSpawner : MonoBehaviour
             return;
 
         int unitCountdown = (int)countdown;
-        float fractionCountdown = countdown - unitCountdown;
-
         waveCountdownText.text = unitCountdown.ToString();
-        waveCountdownFractionText.text = "." + fractionCountdown.ToString().Substring(2, 2);
+
+        float fractionCountdown = countdown - unitCountdown;
+        string fractionString = fractionCountdown.ToString();
+        fractionString = (fractionString.Length > 3) ? fractionString.Substring(2, 2) : "00";
+        waveCountdownFractionText.text = "." + fractionString;
     }
 
     // https://docs.unity3d.com/Manual/Coroutines.html
     IEnumerator SpawnWave ()
     {
         waveIndex++;
+        PlayerStats.Rounds++;
 
         for (int i = 0; i < waveIndex; i++)
         {

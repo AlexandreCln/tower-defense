@@ -34,12 +34,13 @@ public class Construction : MonoBehaviour
 
     void Update()
     {
-        if (target == null) {
-
+        if (target == null)
+        {
             if (useLaser)
             {
                 LaserOff();
             }
+
             return;
         }
 
@@ -68,7 +69,7 @@ public class Construction : MonoBehaviour
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         float shortestDistance = Mathf.Infinity;
-        GameObject nearestEnemy = null;
+        GameObject nearestEnemyTarget = null;
 
         foreach (GameObject enemy in enemies)
         {
@@ -77,14 +78,19 @@ public class Construction : MonoBehaviour
             if (distanceToEnemy < shortestDistance)
             {
                 shortestDistance = distanceToEnemy;
-                nearestEnemy = enemy;
+                nearestEnemyTarget = enemy;
             }
         }
 
-        if (nearestEnemy != null && shortestDistance <= range)
+        if (nearestEnemyTarget != null && shortestDistance <= range)
         {
-            target = nearestEnemy.transform;
-            targetEnemy = target.GetComponent<Enemy>();
+            target = nearestEnemyTarget.transform;
+            Enemy nearestEnemy = target.GetComponent<Enemy>();
+
+            if (useLaser && targetEnemy != null && nearestEnemy != targetEnemy)
+                targetEnemy.StopSlow();
+            
+            targetEnemy = nearestEnemy;
         }
         else
         {
@@ -132,10 +138,16 @@ public class Construction : MonoBehaviour
 
     void LaserOff()
     {
+        if (targetEnemy)
+            targetEnemy.StopSlow();
+
+        if (!lineRenderer.enabled)
+            return;
+            
         // Stop method allows to stop emmision and keep already spawned particles
         lineRenderer.enabled = false;
         impactEffect.Stop();
-        targetEnemy.StopSlow();
+
     }
 
     void Projectile()

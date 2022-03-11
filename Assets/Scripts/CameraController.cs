@@ -25,6 +25,12 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.GameIsOver)
+        {
+            this.enabled = false;
+            return;
+        }
+
         HandleRotationZoom();
 
         if (Input.GetKey(KeyCode.Escape))
